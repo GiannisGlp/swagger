@@ -1,0 +1,174 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "App Config API",
+    "description" : "API for managing app configuration settings.",
+    "contact" : {
+      "email" : "you@your-company.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/omnia-0e4/super_api/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "tags" : [ {
+    "name" : "admins",
+    "description" : "Secured Admin-only calls"
+  }, {
+    "name" : "developers",
+    "description" : "Operations available to regular developers"
+  } ],
+  "paths" : {
+    "/config" : {
+      "get" : {
+        "tags" : [ "developers" ],
+        "summary" : "Get app configuration",
+        "description" : "Fetches the app configuration settings.",
+        "operationId" : "getAppConfig",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AppConfig"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Configuration not found"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "admins" ],
+        "summary" : "Add app configuration",
+        "description" : "Adds a new app configuration.",
+        "operationId" : "addAppConfig",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AppConfig"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Configuration added successfully"
+          },
+          "400" : {
+            "description" : "Invalid request body"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "SettingsScreenItem" : {
+        "required" : [ "title", "type" ],
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "description" : "The title of the settings screen item."
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "A description of the settings screen item."
+          },
+          "icon" : {
+            "type" : "string",
+            "description" : "The icon associated with the settings screen item."
+          },
+          "buttonType" : {
+            "type" : "string",
+            "description" : "The type of button for the settings screen item.",
+            "enum" : [ "link", "switch", "picker", "logout" ]
+          },
+          "screen" : {
+            "type" : "string",
+            "description" : "The screen associated with the settings screen item."
+          },
+          "linkURL" : {
+            "type" : "string",
+            "description" : "The URL to navigate to when the button is clicked."
+          },
+          "pickerData" : {
+            "type" : "array",
+            "description" : "Data for picker-type buttons.",
+            "items" : {
+              "$ref" : "#/components/schemas/SettingsScreenItem_pickerData"
+            }
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "The type of the settings screen item."
+          }
+        }
+      },
+      "AppConfig" : {
+        "type" : "object",
+        "properties" : {
+          "settings" : {
+            "$ref" : "#/components/schemas/AppConfig_settings"
+          }
+        }
+      },
+      "SettingsScreenItem_pickerData" : {
+        "type" : "object",
+        "properties" : {
+          "value" : {
+            "type" : "string",
+            "description" : "The value of the picker item."
+          },
+          "label" : {
+            "type" : "string",
+            "description" : "The label of the picker item."
+          }
+        }
+      },
+      "AppConfig_settings" : {
+        "type" : "object",
+        "properties" : {
+          "settings_screen_appearance" : {
+            "type" : "array",
+            "description" : "Appearance-related settings.",
+            "items" : {
+              "$ref" : "#/components/schemas/SettingsScreenItem"
+            }
+          },
+          "settings_screen_notifications" : {
+            "type" : "array",
+            "description" : "Notification-related settings.",
+            "items" : {
+              "$ref" : "#/components/schemas/SettingsScreenItem"
+            }
+          },
+          "settings_screen_logout" : {
+            "type" : "array",
+            "description" : "Logout-related settings.",
+            "items" : {
+              "$ref" : "#/components/schemas/SettingsScreenItem"
+            }
+          }
+        }
+      }
+    }
+  }
+}
